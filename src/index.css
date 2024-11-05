@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-grayscale-800 p-4 text-white;
+}
+
+button {
+  @apply from-primary-500 to-primary-700 disabled:from-grayscale-700 disabled:to-grayscale-700 rounded-md bg-gradient-to-r px-6 py-2 font-semibold text-black hover:opacity-50 disabled:text-white disabled:opacity-50;
+}
+
+input[type="text"] {
+  @apply border-grayscale-700 bg-grayscale-700 focus:border-primary-500 rounded-md border-2 px-2 py-1 text-white shadow-lg outline-none;
+}
+
+select {
+  @apply border-grayscale-700 bg-grayscale-700 focus:border-primary-500 rounded-md border-2 px-2 py-1 text-white shadow-lg outline-none;
+}
