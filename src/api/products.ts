@@ -1,10 +1,13 @@
+import { z } from "zod";
 import { products } from "./data/products";
 
-export type ProductFilters = {
-  category?: "sport" | "food" | "tech";
-  maxPrice?: number;
-  search?: string;
-};
+export const productFiltersSchema = z.object({
+  category: z.enum(["sport", "food", "tech"]).optional(),
+  maxPrice: z.number().optional(),
+  search: z.string().optional(),
+});
+
+export type ProductFilters = z.infer<typeof productFiltersSchema>;
 
 export const getProducts = async (options?: ProductFilters) => {
   // Add delay to mimic API call
