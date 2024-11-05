@@ -1,34 +1,31 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductFilters } from "../api/products";
 import { useDebounce } from "../hooks/useDebounce";
+import { useProductFilters } from "../hooks/useProductFilters";
 
-type ProductListFiltersProps = {
-  onChange: (filters: ProductFilters) => void;
-};
+const ProductListFilters = () => {
+  const { search, maxPrice, category, setFilters } = useProductFilters();
 
-const ProductListFilters: FC<ProductListFiltersProps> = ({ onChange }) => {
-  const [search, setSearch] = useState<ProductFilters["search"]>();
-  const debouncedSearch = useDebounce(search);
-
-  const [category, setCategory] = useState<ProductFilters["category"]>();
-  const [maxPrice, setMaxPrice] = useState<ProductFilters["maxPrice"]>();
+  const [localSearch, setLocalSearch] =
+    useState<ProductFilters["search"]>(search);
+  const debouncedSearch = useDebounce(localSearch);
 
   useEffect(() => {
-    onChange({ category, maxPrice, search: debouncedSearch });
-  }, [category, debouncedSearch, maxPrice]);
+    setFilters({ search: debouncedSearch });
+  }, [debouncedSearch]);
 
   return (
     <div className="mb-6 flex flex-row gap-2">
       <input
         type="text"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={localSearch}
+        onChange={(e) => setLocalSearch(e.target.value)}
         placeholder="Rechercher un produit ..."
       />
       <select
         value={category}
         onChange={(e) =>
-          setCategory(e.target.value as ProductFilters["category"])
+          setFilters({ category: e.target.value as ProductFilters["category"] })
         }
       >
         <option value="" selected disabled>
@@ -41,7 +38,9 @@ const ProductListFilters: FC<ProductListFiltersProps> = ({ onChange }) => {
       <select
         value={maxPrice}
         onChange={(e) =>
-          setMaxPrice(e.target.value ? parseInt(e.target.value) : undefined)
+          setFilters({
+            maxPrice: e.target.value ? parseInt(e.target.value) : undefined,
+          })
         }
       >
         <option value="" selected disabled>
